@@ -1,11 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from datetime import datetime
+import logging
 
 from app.auth.models import User
 from app.cart.models import CartItem
 from app.core.database import get_db
-from app.core.dependencies import get_current_user
+from app.core.dependencies import get_current_user, verify_user
 from app.orders.models import Order, OrderItem
 from app.orders.schemas import (
     OrderResponse,
@@ -17,13 +18,16 @@ from app.exception import (
 )
 from app.products.models import Product
 
+logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/orders", tags=["orders"])
 
 @router.post("/checkout", response_model=OrderResponse)
 async def checkout(
         db: Session = Depends(get_db),
-        current_user: User = Depends(get_current_user)
+         current_user: User = Depends(verify_user)  # Use active user
 ):
+    logger.info(f"Checkout request from user: {current_user.email}")
+
     cart_items = db.query(CartItem).filter(
         CartItem.user_id == current_user.id
     ).all()
@@ -70,23 +74,30 @@ async def checkout(
     db.query(CartItem).filter(CartItem.user_id == current_user.id).delete()
     db.commit()
 
+    logger.info(f"Order {order.id} created successfully for user {current_user.email}")
     return order
 
 @router.get("", response_model=list[OrderListResponse])
 async def view_order_history(
         db: Session = Depends(get_db),
-        current_user: User = Depends(get_current_user)
+         current_user: User = Depends(verify_user)
 ):
-    return db.query(Order).filter(
+    logger.info(f"Order history request from user: {current_user.email}")
+    orders = db.query(Order).filter(
         Order.user_id == current_user.id
     ).order_by(Order.created_at.desc()).all()
+
+    logger.info(f"Found {len(orders)} orders for user {current_user.email}")
+    return orders
 
 @router.get("/{order_id}", response_model=OrderResponse)
 async def view_order_details(
         order_id: int,
         db: Session = Depends(get_db),
-        current_user: User = Depends(get_current_user)
+         current_user: User = Depends(verify_user)
 ):
+    logger.info(f"Order details request for order {order_id} from user: {current_user.email}")
+
     order = db.query(Order).filter(
         Order.id == order_id,
         Order.user_id == current_user.id

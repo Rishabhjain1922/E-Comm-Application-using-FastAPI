@@ -40,11 +40,16 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
         to_encode = data.copy()
         expire = datetime.utcnow() + (expires_delta or timedelta(minutes=15))
         to_encode.update({"exp": expire})
-        return jwt.encode(
+
+        token = jwt.encode(
             to_encode,
             settings.SECRET_KEY,
             algorithm=settings.ALGORITHM
         )
+
+        logger.info(f"Created token for user: {data.get('sub')} with role: {data.get('role')}")
+        return token
+
     except JWTError as e:
         logger.error(f"Token creation failed: {str(e)}")
         raise HTTPException(
@@ -52,22 +57,26 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
             detail="Error creating token"
         )
 
+# In security.py
 def decode_token(token: str) -> dict:
-    """Decode and verify a JWT token"""
     try:
+        logger.info(f"Decoding token: {token[:20]}...")
         payload = jwt.decode(
             token,
             settings.SECRET_KEY,
             algorithms=[settings.ALGORITHM]
         )
+        logger.info(f"Token decoded successfully")
         return {
-            "email": payload.get("sub"),  # Using "sub" as standard JWT subject claim
+            "sub": payload.get("sub"),
             "role": payload.get("role")
         }
-    except JWTError as e:
-        logger.error(f"Token decoding failed: {str(e)}")
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid token",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+    except jwt.ExpiredSignatureError:
+        logger.error("Token has expired")
+        return None
+    except jwt.JWTError as e:
+        logger.error(f"JWT Error: {str(e)}")
+        return None
+    except Exception as e:
+        logger.error(f"Unexpected decode error: {str(e)}")
+        return None

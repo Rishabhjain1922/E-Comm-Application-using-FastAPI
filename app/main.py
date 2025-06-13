@@ -6,12 +6,11 @@ from app.products.routes import router as products_router
 from app.cart.routes import router as cart_router
 from app.orders.routes import router as orders_router
 
+Base.metadata.create_all(bind=engine)
 app = FastAPI(swagger_ui_init_oauth={
     "usePkceWithAuthorizationCodeGrant": False,
     "clientId": None
 })
-Base.metadata.create_all(bind=engine)
-
 # CORS
 app.add_middleware(
     CORSMiddleware,

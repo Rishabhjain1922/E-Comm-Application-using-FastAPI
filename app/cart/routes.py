@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from app.auth.models import User
 from app.core.database import get_db
-from app.core.dependencies import get_current_user
+from app.core.dependencies import get_current_user, verify_user
 from app.cart.models import CartItem
 from app.cart.schemas import (
     CartItemCreate,
@@ -22,7 +22,7 @@ router = APIRouter(prefix="/cart", tags=["cart"])
 async def add_to_cart(
         item: CartItemCreate,
         db: Session = Depends(get_db),
-        current_user: User = Depends(get_current_user)
+       current_user: User = Depends(verify_user)
 ):
     product = db.query(Product).filter(Product.id == item.product_id).first()
     if not product:
@@ -52,7 +52,7 @@ async def add_to_cart(
 @router.get("", response_model=CartResponse)
 async def view_cart(
         db: Session = Depends(get_db),
-        current_user: User = Depends(get_current_user)
+       current_user: User = Depends(verify_user)
 ):
     cart_items = db.query(CartItem).filter(
         CartItem.user_id == current_user.id
@@ -74,7 +74,7 @@ async def update_cart_item(
         product_id: int,
         item: CartItemUpdate,
         db: Session = Depends(get_db),
-        current_user: User = Depends(get_current_user)
+       current_user: User = Depends(verify_user)
 ):
     cart_item = db.query(CartItem).filter(
         CartItem.user_id == current_user.id,
@@ -96,7 +96,7 @@ async def update_cart_item(
 async def remove_from_cart(
         product_id: int,
         db: Session = Depends(get_db),
-        current_user: User = Depends(get_current_user)
+       current_user: User = Depends(verify_user)
 ):
     db.query(CartItem).filter(
         CartItem.user_id == current_user.id,

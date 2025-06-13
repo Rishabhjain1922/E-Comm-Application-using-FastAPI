@@ -36,7 +36,7 @@ from app.core.dependencies import (
     require_user
 )
 
-router = APIRouter(prefix="/auth", tags=["auth"])
+router = APIRouter(prefix="", tags=["auth"])
 
 @router.post("/signup", response_model=UserInDB)
 async def signup(user: UserCreate, db: Session = Depends(get_db)):
@@ -45,7 +45,6 @@ async def signup(user: UserCreate, db: Session = Depends(get_db)):
         User.email == user.email,
         User.role == user.role
     ).first()
-
     if existing_user:
         raise EmailAlreadyRegisteredError()
 
@@ -87,7 +86,7 @@ async def login(
             status_code=status.HTTP_403_FORBIDDEN,
             detail=f"User does not have {user_login.role} privileges"
         )
-
+    user.last_login=datetime.utcnow()
     access_token = create_access_token(
         data={
             "sub": user.email,
@@ -95,7 +94,7 @@ async def login(
         },
         expires_delta=timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     )
-
+    db.commit()
     return {"access_token": access_token, "token_type": "bearer"}
 
 @router.post("/forgot-password")

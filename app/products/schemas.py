@@ -24,7 +24,8 @@ class ProductUpdate(BaseModel):
 class ProductInDB(ProductBase):
     id: int
     created_at: datetime
-    updated_at: datetime
+    updated_at: Optional[datetime] = None
+    created_by: int  # Added created_by field
 
     class Config:
         from_attributes = True
