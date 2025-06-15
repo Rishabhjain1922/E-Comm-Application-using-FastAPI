@@ -79,15 +79,12 @@ This project is a **backend RESTful API** built with **FastAPI** for an e-commer
 
 ## 🚀 Getting Started
 
-### Step 1️⃣: Clone the Repository
-
 ```bash
+### Step 1️⃣: Clone the Repository
 git clone https://github.com/Rishabhjain1922/E-Comm-Application-using-FastAPI/tree/main
 cd fastapi-ecommerce-backend
 Step 2️⃣: Create a Virtual Environment
-bash
-Copy
-Edit
+
 # For Windows
 python -m venv venv
 venv\Scripts\activate
@@ -96,27 +93,23 @@ venv\Scripts\activate
 python3 -m venv venv
 source venv/bin/activate
 Step 3️⃣: Install Dependencies
-bash
-Copy
-Edit
+
 pip install -r requirements.txt
 Step 4️⃣: Set Environment Variables
 Create a .env file in the root directory and add:
 
 env
-Copy
-Edit
+
 DATABASE_URL=sqlite:///./ecommerce.db  # or your PostgreSQL connection string
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=30
 
 Step 5️⃣: Run the Application
-bash
-Copy
-Edit
+
 uvicorn app.main:app --reload
 Now open http://localhost:8000/docs for interactive Swagger documentation.
 
+---
 🧪 Testing
 Use Postman or Swagger UI for manual API testing.
 
@@ -133,10 +126,6 @@ Secure password reset with tokens
 
 📄 API Documentation
 Available via Swagger UI:
-
-bash
-Copy
-Edit
 http://localhost:8000/docs
 🧰 Developer Tools
 Auto-formatting: black
@@ -175,12 +164,4 @@ Commit your changes
 Push to the branch
 
 Create a Pull Request
-
-
-
-yaml
-Copy
-Edit
-
----
 
