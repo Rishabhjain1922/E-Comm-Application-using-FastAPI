@@ -6,7 +6,7 @@ import logging
 from app.auth.models import User
 from app.cart.models import CartItem
 from app.core.database import get_db
-from app.core.dependencies import get_current_user, verify_user
+from app.core.dependencies import get_current_user, verify_user, require_user
 from app.orders.models import Order, OrderItem
 from app.orders.schemas import OrderResponse, OrderListResponse
 from app.exception import (
@@ -24,7 +24,7 @@ router = APIRouter(prefix="/orders", tags=["orders"])
 @router.post("/checkout", response_model=OrderResponse)
 async def checkout(
         db: Session = Depends(get_db),
-        current_user: User = Depends(verify_user)
+        current_user: User = Depends(require_user)
 ):
     logger.info(f"Checkout initiated for user: {current_user.email}")
 
@@ -132,7 +132,7 @@ async def checkout(
 @router.get("", response_model=list[OrderListResponse])
 async def view_order_history(
         db: Session = Depends(get_db),
-        current_user: User = Depends(verify_user)
+        current_user: User = Depends(require_user)
 ):
     logger.info(f"Order history requested for user: {current_user.email}")
 
@@ -166,7 +166,7 @@ async def view_order_history(
 async def view_order_details(
         order_id: int,
         db: Session = Depends(get_db),
-        current_user: User = Depends(verify_user)
+        current_user: User = Depends(require_user)
 ):
     logger.info(f"Order details requested for order {order_id} by user {current_user.email}")
 

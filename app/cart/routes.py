@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from app.auth.models import User
 from app.core.database import get_db
-from app.core.dependencies import get_current_user, verify_user
+from app.core.dependencies import get_current_user, require_user
 from app.cart.models import CartItem
 from app.cart.schemas import CartItemCreate, CartItemUpdate, CartResponse
 from app.exception import ProductNotFoundError, InsufficientStockError
@@ -19,7 +19,7 @@ router = APIRouter(prefix="/cart", tags=["cart"])
 async def add_to_cart(
         item: CartItemCreate,
         db: Session = Depends(get_db),
-        current_user: User = Depends(verify_user)
+        current_user: User = Depends(require_user)
 ):
     """Add item to cart with proper inventory validation"""
     try:
@@ -76,7 +76,7 @@ async def add_to_cart(
 @router.get("", response_model=CartResponse)
 async def view_cart(
         db: Session = Depends(get_db),
-        current_user: User = Depends(verify_user)
+        current_user: User = Depends(require_user)
 ):
     """Retrieve user's cart contents"""
     try:
@@ -110,7 +110,7 @@ async def update_cart_item(
         product_id: int,
         item: CartItemUpdate,
         db: Session = Depends(get_db),
-        current_user: User = Depends(verify_user)
+        current_user: User = Depends(require_user)
 ):
     """Update cart item quantity with validation"""
     try:
@@ -159,7 +159,7 @@ async def update_cart_item(
 async def remove_from_cart(
         product_id: int,
         db: Session = Depends(get_db),
-        current_user: User = Depends(verify_user)
+        current_user: User = Depends(require_user)
 ):
     """Remove item from cart"""
     try:

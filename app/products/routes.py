@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from typing import Optional
 from sqlalchemy import asc, desc
 from app.core.database import get_db
-from app.core.dependencies import get_last_logged_in_user, verify_admin, verify_user
+from app.core.dependencies import get_last_logged_in_user, require_admin, require_user
 from app.auth.models import UserRole, User
 from app.products.models import Product
 from app.products.schemas import ProductCreate, ProductUpdate, ProductInDB
@@ -20,7 +20,7 @@ router = APIRouter(prefix="/products", tags=["products"])
 async def create_product(
         product: ProductCreate,
         db: Session = Depends(get_db),
-        current_user: User = Depends(verify_admin)  # Requires last logged-in admin
+        current_user: User = Depends(require_admin)  # Requires last logged-in admin
 ):
     try:
         logger.info(f"Admin {current_user.id} creating product: {product.name}")
@@ -44,7 +44,7 @@ async def create_product(
 @router.get("/admin", response_model=list[ProductInDB])
 async def read_admin_products(
         db: Session = Depends(get_db),
-        current_user: User = Depends(verify_admin)  # Requires last logged-in admin
+        current_user: User = Depends(require_admin)  # Requires last logged-in admin
 ):
     try:
         logger.info(f"Admin {current_user.id} listing their products")
@@ -64,7 +64,7 @@ async def read_admin_products(
 async def read_admin_product(
         product_id: int,
         db: Session = Depends(get_db),
-        current_user: User = Depends(verify_admin)  # Requires last logged-in admin
+        current_user: User = Depends(require_admin)  # Requires last logged-in admin
 ):
     try:
         logger.info(f"Admin {current_user.id} accessing product ID={product_id}")
@@ -92,7 +92,7 @@ async def update_product(
         product_id: int,
         product: ProductUpdate,
         db: Session = Depends(get_db),
-        current_user: User = Depends(verify_admin)  # Requires last logged-in admin
+        current_user: User = Depends(require_admin)  # Requires last logged-in admin
 ):
     try:
         logger.info(f"Admin {current_user.id} updating product ID={product_id}")
@@ -133,7 +133,7 @@ async def update_product(
 async def delete_product(
         product_id: int,
         db: Session = Depends(get_db),
-        current_user: User = Depends(verify_admin)  # Requires last logged-in admin
+        current_user: User = Depends(require_admin)  # Requires last logged-in admin
 ):
     try:
         logger.info(f"Admin {current_user.id} deleting product ID={product_id}")
@@ -165,7 +165,7 @@ async def delete_product(
 @router.get("", response_model=list[ProductInDB])
 async def read_products(
         db: Session = Depends(get_db),
-        current_user: User = Depends(verify_user),
+        current_user: User = Depends(require_user),
         category: Optional[str] = Query(None, description="Filter by product category"),
         min_price: Optional[float] = Query(None, description="Minimum price filter"),
         max_price: Optional[float] = Query(None, description="Maximum price filter"),
@@ -239,7 +239,7 @@ async def read_products(
 async def search_products(
         keyword: str = Query(..., min_length=1),
         db: Session = Depends(get_db),
-        current_user: User = Depends(verify_user)  # Requires last logged-in user
+        current_user: User = Depends(require_user)  # Requires last logged-in user
 ):
     try:
         logger.info(f"User {current_user.id} searching for: '{keyword}'")
@@ -267,7 +267,7 @@ async def search_products(
 async def read_product(
         product_id: int,
         db: Session = Depends(get_db),
-        current_user: User = Depends(verify_user)  # Requires last logged-in user
+        current_user: User = Depends(require_user)  # Requires last logged-in user
 ):
     try:
         logger.info(f"User {current_user.id} viewing product ID={product_id}")

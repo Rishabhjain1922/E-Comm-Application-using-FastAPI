@@ -39,7 +39,12 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
     try:
         to_encode = data.copy()
         expire = datetime.utcnow() + (expires_delta or timedelta(minutes=15))
-        to_encode.update({"exp": expire})
+        to_encode.update({"exp": expire,"sub": to_encode.get("sub", ""),
+                          "role": to_encode.get("role", ""),
+                          "id": to_encode.get("id", 0)})
+
+        if not all([to_encode.get("sub"), to_encode.get("role"), to_encode.get("id")]):
+            raise ValueError("Missing required token claims")
 
         token = jwt.encode(
             to_encode,
