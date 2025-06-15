@@ -2,58 +2,51 @@
 
 ## 📌 Project Overview
 
-This project is a **backend RESTful API** built with **FastAPI** for an e-commerce platform. It provides a secure, maintainable, and modular backend system for managing users, products, orders, carts, and authentication functionalities. The system is designed for admin product management and customer-side browsing and ordering functionalities.
-
----
+This project is a RESTful backend API developed using **FastAPI** for an e-commerce platform. It offers a secure, scalable, and modular backend for managing users, products, orders, shopping carts, and authentication. It supports both admin-side product control and customer-side browsing and purchasing.
 
 ## 🎯 Objectives
 
-- Implement **Admin CRUD operations** for product management.
-- Provide **User authentication** (signup, signin, forgot/reset password).
-- Enable **Product browsing**, filtering, and search.
-- Add **Shopping cart**, checkout, and order history features.
-- Enforce **RBAC (Role-Based Access Control)** using JWT.
+- Admin-side CRUD operations for product management  
+- User authentication (signup, login, forgot/reset password)  
+- Product browsing, search, and filter functionality  
+- Shopping cart operations and order management  
+- Role-Based Access Control (RBAC) using JWT  
 
----
+## 🛠️ Tech Stack
 
-## 📦 Tech Stack
-
-- **FastAPI** - Web framework
-- ** SQLite** - Database
-- **SQLAlchemy** - ORM
-- **Pydantic** - Data validation
-- **JWT (via PyJWT)** - Authentication
-
----
+- **FastAPI** – Web framework  
+- **SQLite** – Lightweight relational database  
+- **SQLAlchemy** – ORM for database interaction  
+- **Pydantic** – Data validation and parsing  
+- **JWT (via PyJWT)** – Secure token-based authentication  
 
 ## 🧾 Features
 
 ### 🔐 Authentication
-- Signup, Signin
-- Forgot/Reset password via secure token
-- JWT-based authentication
-- RBAC: `admin` and `user` roles
+- Signup & Signin  
+- Forgot/Reset password via secure token  
+- JWT-based authentication  
+- RBAC support (admin and user roles)
 
 ### 📦 Product Management (Admin Only)
-- Add, Update, Delete, List products
-- Pagination, filtering, and detailed views
+- Add, update, delete, and list products  
+- Pagination, filtering, and detailed product views
 
 ### 🛍️ Product APIs (Public)
-- Product listing with filters (category, price, sort)
-- Search by keyword
-- Detail view of a single product
+- List products with filters (category, price, sort)  
+- Search by keyword  
+- View individual product details
 
 ### 🛒 Cart
-- Add/Remove/Update items in cart
-- View cart
+- Add, remove, and update items in the cart  
+- View cart contents
 
 ### 💳 Checkout
-- Dummy checkout (mocked payment)
-- Order creation on successful checkout
+- Mock checkout with order creation  
+- Confirmation upon successful payment simulation
 
 ### 📜 Orders
-- View order history and detailed past orders (for users only)
-
+- View order history and detailed past orders (for users)
 
 ## 🧱 Database Schema Overview
 
@@ -75,93 +68,102 @@ This project is a **backend RESTful API** built with **FastAPI** for an e-commer
 ### OrderItems
 - `id`, `order_id`, `product_id`, `quantity`, `price_at_purchase`
 
----
-
 ## 🚀 Getting Started
 
-```bash
-### Step 1️⃣: Clone the Repository
-git clone https://github.com/Rishabhjain1922/E-Comm-Application-using-FastAPI/tree/main
-cd fastapi-ecommerce-backend
-Step 2️⃣: Create a Virtual Environment
+### Step 1: Clone the Repository
 
-# For Windows
+```bash
+git clone https://github.com/Rishabhjain1922/E-Comm-Application-using-FastAPI.git
+cd E-Comm-Application-using-FastAPI
+```
+
+### Step 2: Create and Activate Virtual Environment
+
+#### For Windows:
+
+```bash
 python -m venv venv
 venv\Scripts\activate
+```
 
-# For macOS/Linux
+#### For macOS/Linux:
+
+```bash
 python3 -m venv venv
 source venv/bin/activate
-Step 3️⃣: Install Dependencies
+```
 
+### Step 3: Install Dependencies
+
+```bash
 pip install -r requirements.txt
-Step 4️⃣: Set Environment Variables
-Create a .env file in the root directory and add:
+```
 
-env
+### Step 4: Create `.env` File
 
-DATABASE_URL=sqlite:///./ecommerce.db  # or your PostgreSQL connection string
+Create a `.env` file in the root directory with the following content:
+
+```env
+DATABASE_URL=sqlite:///./ecommerce.db
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=30
+```
 
-Step 5️⃣: Run the Application
+### Step 5: Run the Application
 
-uvicorn app.main:app --reload
-Now open http://localhost:8000/docs for interactive Swagger documentation.
 ```bash
----
-🧪 Testing
-Use Postman or Swagger UI for manual API testing.
+uvicorn app.main:app --reload
+```
 
-Includes authentication, product CRUD, cart, checkout, and order tests.
+Now open your browser and go to [http://localhost:8000/docs](http://localhost:8000/docs)
 
-🔐 Security Highlights
-Passwords hashed using bcrypt
+## 🧪 Testing
 
-Input validation via Pydantic
+Use Postman or Swagger UI to test API endpoints.  
+Test coverage includes:
 
-Role-based access control (RBAC)
+- User authentication (signup/login/reset)  
+- Product CRUD operations  
+- Cart operations  
+- Checkout & order flows  
 
-Secure password reset with tokens
+## 🔐 Security Highlights
 
-📄 API Documentation
-Available via Swagger UI:
-http://localhost:8000/docs
-🧰 Developer Tools
-Auto-formatting: black
+- Passwords hashed using `bcrypt`  
+- Input validation using `Pydantic`  
+- JWT-based authentication and RBAC  
+- Secure password reset with time-limited tokens  
 
-Linting: flake8
+## 📄 API Documentation
 
-Migrations: alembic
+Interactive API docs available at:  
+[http://localhost:8000/docs](http://localhost:8000/docs)
 
-📤 Deployment Guidelines
-Use .env for sensitive configs
+## 🧰 Developer Tools
 
-Use Gunicorn or Uvicorn in production
+- Auto-formatting: `black`  
+- Linting: `flake8`  
+- Migrations: `alembic`  
 
-Connect to a production-grade database (e.g., PostgreSQL)
+## 📤 Deployment Guidelines
 
-Set up HTTPS, logging, and proper exception handling
+- Use `.env` for environment configuration  
+- Use `Uvicorn` or `Gunicorn` in production  
+- Replace SQLite with PostgreSQL for production use  
+- Set up HTTPS, proper logging, and error handling  
 
-📚 Deliverables
-✅ Fully functional FastAPI backend
+## 📚 Deliverables
 
-✅ Postman collection for testing
+- ✅ Fully functional FastAPI backend  
+- ✅ Postman collection for testing  
+- ✅ Swagger API documentation  
+- ✅ Seed data scripts  
+- ✅ Complete README with setup guide  
 
-✅ Swagger API docs
+## 🤝 Contributing
 
-✅ Seed data scripts
-
-✅ Complete README with setup instructions
-
-🤝 Contributing
-Fork the repo
-
-Create a new branch (feature/your-feature)
-
-Commit your changes
-
-Push to the branch
-
-Create a Pull Request
-
+- Fork the repository  
+- Create a new branch: `feature/your-feature-name`  
+- Commit your changes  
+- Push to your branch  
+- Open a Pull Request  
