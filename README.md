@@ -141,29 +141,15 @@ Interactive API docs available at:
 
 ## 🧰 Developer Tools
 
-- Auto-formatting: `black`  
-- Linting: `flake8`  
-- Migrations: `alembic`  
+- Database Management- TablePlus
+- Coding- Intellij Idea
+- Testing- Postman and Swigger UI 
 
 ## 📤 Deployment Guidelines
 
 - Use `.env` for environment configuration  
-- Use `Uvicorn` or `Gunicorn` in production  
-- Replace SQLite with PostgreSQL for production use  
+- Use `Uvicorn`  in production  
+- Replace SQLite  for production use  
 - Set up HTTPS, proper logging, and error handling  
 
-## 📚 Deliverables
-
-- ✅ Fully functional FastAPI backend  
-- ✅ Postman collection for testing  
-- ✅ Swagger API documentation  
-- ✅ Seed data scripts  
-- ✅ Complete README with setup guide  
-
-## 🤝 Contributing
-
-- Fork the repository  
-- Create a new branch: `feature/your-feature-name`  
-- Commit your changes  
-- Push to your branch  
-- Open a Pull Request  
+ 
