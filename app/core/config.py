@@ -3,6 +3,7 @@ from pydantic import EmailStr, Field
 from typing import Optional
 
 class Settings(BaseSettings):
+    DEBUG: bool = True
     API_V1_STR: str = "/api/v1"
     SECRET_KEY: str = Field(..., min_length=32)
     ALGORITHM: str = "HS256"

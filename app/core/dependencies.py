@@ -118,6 +118,6 @@ def verify_user(user = Depends(get_last_logged_in_user)):
             detail="User access required"
         )
     return user
-# Aliases for clearer usage
+
 require_admin = get_current_admin
 require_user = get_current_customer
