@@ -108,7 +108,7 @@ Step 5️⃣: Run the Application
 
 uvicorn app.main:app --reload
 Now open http://localhost:8000/docs for interactive Swagger documentation.
-
+```bash
 ---
 🧪 Testing
 Use Postman or Swagger UI for manual API testing.
