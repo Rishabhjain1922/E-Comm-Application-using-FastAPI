@@ -1,0 +1,63 @@
+[project]
+name = "fastapi-jwt-auth"
+version = "0.1.0"
+description = "FastAPI application with JWT authentication and role-based access control"
+authors = [
+    { name = "Rishabh Jain", email = "Rishabhjain1922@gmail.com" }
+]
+requires-python = ">=3.8"
+readme = "README.md"
+license = { text = "MIT" }
+
+dependencies = [
+    "fastapi>=0.95.0",
+    "python-jose[cryptography]>=3.3.0",
+    "passlib[bcrypt]>=1.7.4",
+    "python-multipart>=0.0.5",
+    "sqlalchemy>=2.0.0",
+    "pydantic>=2.0.0",
+    "uvicorn>=0.22.0",
+
+
+]
+
+
+
+docs = [
+    "mkdocs>=1.4.3",
+    "mkdocs-material>=9.1.8",
+    "mkdocstrings[python]>=0.21.2"
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+addopts = "--cov=app --cov-report=term-missing"
+
+[tool.black]
+line-length = 88
+target-version = ["py38"]
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+known_first_party = ["app"]
+sections = ["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
+line_length = 88

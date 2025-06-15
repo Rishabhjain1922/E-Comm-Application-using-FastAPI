@@ -13,9 +13,6 @@ from app.core.security import create_access_token, verify_password, get_password
 from app.exception import EmailSendError, InvalidCredentialsError, EmailAlreadyRegisteredError, InvalidTokenError
 from app.utils.email import send_reset_password_email
 
-# ... existing imports ...
-
-# Get logger
 logger = logging.getLogger("app.auth")
 
 router = APIRouter(prefix="", tags=["auth"])
@@ -80,11 +77,9 @@ async def login(
             logger.warning(f"Role mismatch for {user_login.email}: requested {user_login.role}, actual {user.role}")
             raise InvalidCredentialsError()
 
-        # Update last login
         user.last_login = datetime.utcnow()
         db.commit()
 
-        # Generate token
         access_token = create_access_token(
             data={
                 "sub": user.email,
@@ -118,7 +113,7 @@ async def forgot_password(
             logger.info(f"No user found for reset: {request.email} ({request.role})")
             return {"message": "If the email exists for this role, a reset link has been sent"}
 
-        # Generate reset token
+
         reset_token = secrets.token_urlsafe(32)
         user.reset_token = reset_token
         user.reset_token_expires = datetime.utcnow() + timedelta(minutes=15)
@@ -126,7 +121,6 @@ async def forgot_password(
 
         logger.info(f"Reset token generated for: {request.email} ({request.role})")
 
-        # Send email
         try:
             send_reset_password_email(user.email, reset_token, request.role)
             logger.info(f"Password reset email sent to: {request.email}")

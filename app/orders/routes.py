@@ -6,7 +6,7 @@ import logging
 from app.auth.models import User
 from app.cart.models import CartItem
 from app.core.database import get_db
-from app.core.dependencies import get_current_user, verify_user, require_user
+from app.core.dependencies import get_current_user, require_user
 from app.orders.models import Order, OrderItem
 from app.orders.schemas import OrderResponse, OrderListResponse
 from app.exception import (

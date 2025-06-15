@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from typing import Optional
 from sqlalchemy import asc, desc
 from app.core.database import get_db
-from app.core.dependencies import get_last_logged_in_user, require_admin, require_user
+from app.core.dependencies import  require_admin, require_user
 from app.auth.models import UserRole, User
 from app.products.models import Product
 from app.products.schemas import ProductCreate, ProductUpdate, ProductInDB

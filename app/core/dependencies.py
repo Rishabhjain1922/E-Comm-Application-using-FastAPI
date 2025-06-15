@@ -105,69 +105,12 @@ async def require_user(
         )
     return current_user
 
-def get_user_by_email(db: Session, email: str) -> Optional[User]:  # Change return type
-    return db.query(User).filter(User.email == email).first()
 
 
-async def get_current_admin(
-        current_user: User = Depends(get_current_active_user)
-) -> User:
-    """Verify the user is an admin"""
-    if current_user.role != UserRole.admin:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Admin privileges required"
-        )
-    return current_user
-
-async def get_current_customer(
-        current_user: User = Depends(get_current_active_user)
-) -> User:
-    """Verify the user is a regular user"""
-    if current_user.role != UserRole.user:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="User privileges required"
-        )
-    return current_user
 
 
-def get_last_logged_in_user(db: Session = Depends(get_db)):
-    # Find the user with the most recent last_login value
-    last_user = db.query(User).order_by(User.last_login.desc()).first()
 
-    if not last_user:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="No users found"
-        )
 
-    # Create a simple object with user data
-    class LastUser:
-        def __init__(self, user):
-            self.id = user.id
-            self.email = user.email
-            self.name = user.name
-            self.role = user.role
-            self.last_login = user.last_login
 
-    return LastUser(last_user)
 
-def verify_admin(user = Depends(get_last_logged_in_user)):
-    if user.role != UserRole.admin:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Admin access required"
-        )
-    return user
 
-def verify_user(user = Depends(get_last_logged_in_user)):
-    if user.role != UserRole.user:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="User access required"
-        )
-    return user
-
-require_admin = get_current_admin
-require_user = get_current_customer
